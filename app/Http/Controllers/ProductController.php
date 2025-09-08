@@ -79,4 +79,51 @@ class ProductController extends Controller
         $product->forceDelete();
         return back()->with('success', 'Product permanently deleted.');
     }
+
+    public function edit(Product $product)
+{
+    return view('products.editproduct', compact('product'));
+}
+
+public function update(Request $request, Product $product)
+{
+    $data = $request->validate([
+        'title'       => ['required','string','max:255'],
+        'description' => ['nullable','string'],
+        'price'       => ['required','numeric','min:0'],
+        'image'       => ['nullable','image','mimes:jpg,jpeg,png,webp,gif','max:3072'],
+        'remove_image'=> ['nullable','boolean'],
+    ]);
+
+    // handle image
+    $path = $product->image_path;
+
+    // remove existing image if requested
+    if ($request->boolean('remove_image') && $path) {
+        if (\Storage::disk('public')->exists($path)) {
+            \Storage::disk('public')->delete($path);
+        }
+        $path = null;
+    }
+
+    // upload a new image (replaces old)
+    if ($request->hasFile('image')) {
+        // delete old first
+        if ($path && \Storage::disk('public')->exists($path)) {
+            \Storage::disk('public')->delete($path);
+        }
+        $filename = \Illuminate\Support\Str::uuid().'.'.$request->file('image')->extension();
+        $path = $request->file('image')->storeAs('products', $filename, 'public');
+    }
+
+    $product->update([
+        'title'       => $data['title'],
+        'description' => $data['description'] ?? null,
+        'price'       => $data['price'],
+        'image_path'  => $path,
+    ]);
+
+    return redirect()->route('home')->with('success', 'Product updated.');
+}
+
 }

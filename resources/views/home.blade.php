@@ -41,7 +41,7 @@
                         <td>${{ number_format($p->price, 2) }}</td>
                         <td>
                             {{-- Edit will be wired next step --}}
-                            <a href="#" class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">Edit</a>
+<a href="{{ route('products.edit', $p) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
 
                             <form action="{{ route('products.destroy', $p) }}"
                                   method="POST" class="d-inline"
