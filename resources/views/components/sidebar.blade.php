@@ -7,10 +7,11 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
-                <a class="nav-link" href="{{ url('/products') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
-                    Products
-                </a>
+               <a class="nav-link" href="{{ route('products.create') }}">
+    <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
+    Add Products
+</a>
+
 
                 <div class="sb-sidenav-menu-heading">Authentication</div>
 
